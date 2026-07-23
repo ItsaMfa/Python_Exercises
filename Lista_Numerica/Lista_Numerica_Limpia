@@ -1,5 +1,3 @@
-
-promedio = 0
 numeros=[] 
 
 while True:
