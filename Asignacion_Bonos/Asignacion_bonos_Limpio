@@ -93,34 +93,55 @@ def asignar_bono_equitativo(presupuesto, lista_empleados, bono):
         return bono_asignado, empleadosatendidos, presupuesto
 
     bono_equitativo = presupuesto // total_empleados 
-
+    aux = True
     if bono_equitativo < bono:
-        print("El presupuesto no es cubrirá a todas las personas")     
-    
+                    print("El bono equitativo no cubrirá a todas las personas") 
+                    aux = False
+
+    match aux:
+        case False:
+            for key, value in lista_empleados.items():
 
 
-    for key, value in lista_empleados.items():
+                if bono_equitativo < bono:
+                        if presupuesto >= bono_equitativo:
+                            lista_empleados[key][0] = bono
+                            presupuesto -= bono
+                            bono_asignado += bono
+                            empleadosatendidos += 1       
+                            bono_formateado = f"${value[0]:,}".replace(",", ".")
+                            presupuesto_formateado = f"${presupuesto:,}".replace(",", ".")
+                            print(f"Empleado: {key}| Bono asignado: {bono_formateado} | Presupuesto restante: {presupuesto_formateado} ")
 
-        if presupuesto >= bono_equitativo:
-                    lista_empleados[key][0] = bono_equitativo
-                    presupuesto -= bono_equitativo
-                    bono_asignado += bono_equitativo
-                    empleadosatendidos += 1
-     
+            if empleadosatendidos == total_empleados:
+                                print("Todos los empleados han sido atendidos.")
+                                
+            else:
+                                print("No se pudo atender a todos los empleados por falta de presupuesto.")
+                                
+        case True:
         
-        bono_formateado = f"${value[0]:,}".replace(",", ".")
-        presupuesto_formateado = f"${presupuesto:,}".replace(",", ".")
-        print(f"Empleado: {key}| Bono asignado: {bono_formateado} | Presupuesto restante: {presupuesto_formateado} ")
-    if empleadosatendidos == total_empleados:
-                print("Todos los empleados han sido atendidos.")
-    else:
-                print("No se pudo atender a todos los empleados por falta de presupuesto.")
+            for key, value in lista_empleados.items():
+          
 
-    if presupuesto <= 0:
-                print("Presupuesto agotado. No se pueden asignar más bonos.")
-        
-   
-        
+                if presupuesto >= bono_equitativo:
+                            lista_empleados[key][0] = bono_equitativo
+                            presupuesto -= bono_equitativo
+                            bono_asignado += bono_equitativo
+                            empleadosatendidos += 1
+            
+                
+                bono_formateado = f"${value[0]:,}".replace(",", ".")
+                presupuesto_formateado = f"${presupuesto:,}".replace(",", ".")
+                print(f"Empleado: {key}| Bono asignado: {bono_formateado} | Presupuesto restante: {presupuesto_formateado} ")
+
+            if empleadosatendidos == total_empleados:
+                        print("Todos los empleados han sido atendidos.")
+            else:
+                        print("No se pudo atender a todos los empleados por falta de presupuesto.")
+
+            
+                
 
    
     return bono_asignado, empleadosatendidos, presupuesto
@@ -146,6 +167,7 @@ def asignar_bonos_estandar(presupuesto, lista_empleados, bono):
             bono_formateado = f"${value[0]:,}".replace(",", ".")
             presupuesto_formateado = f"${presupuesto:,}".replace(",", ".")
             print(f"Empleado: {key}| Bono asignado: {bono_formateado} | Presupuesto restante: {presupuesto_formateado}")
+           
         else:
             print(f"Presupuesto insuficiente para el empleado {key} (Se requiere: ${faltante:,})".replace(",", "."))
             break
@@ -155,8 +177,6 @@ def asignar_bonos_estandar(presupuesto, lista_empleados, bono):
     else:
         print("No se pudo atender a todos los empleados por falta de presupuesto.")
 
-    if presupuesto <= 0:
-        print("Presupuesto agotado. No se pueden asignar más bonos.")
 
     return bono_asignado, empleadosatendidos, presupuesto
     
@@ -186,12 +206,11 @@ def asignar_bonos_random(presupuesto,empleados, bono_minimo):
             print(f"Empleado: {key}| Bono asignado: {bono_formateado} | Presupuesto restante: {presupuesto_formateado} ")
         else:
             break
-    if empleadosatendidos == empleados:
+    if empleadosatendidos == len(empleados):
         print("Todos los empleados han sido atendidos.")
     else:
         print(f"No se pudo atender a todos los empleados por falta de presupuesto.")
-    if presupuesto <= 0:
-        print(f"Presupuesto agotado. No se pueden asignar más bonos.")
+
     return bono_asignado, empleadosatendidos, presupuesto
 
 
@@ -215,17 +234,17 @@ def asignar_bonos_random_limitado(presupuesto,empleados, bono_minimo, bono_maxim
             presupuesto -= bono
             bono_asignado += bono
             empleadosatendidos += 1
+
             bono_formateado = f"${value[0]:,}".replace(",", ".")
             presupuesto_formateado = f"${presupuesto:,}".replace(",", ".")
             print(f"Empleado: {key}| Bono asignado: {bono_formateado} | Presupuesto restante: {presupuesto_formateado} ")
         else:
             break
-    if empleadosatendidos == empleados:
+    if empleadosatendidos == len(empleados):
         print("Todos los empleados han sido atendidos.")
     else:
         print(f"No se pudo atender a todos los empleados por falta de presupuesto.")
-    if presupuesto <= 0:
-        print(f"Presupuesto agotado. No se pueden asignar más bonos.")
+
     return bono_asignado, empleadosatendidos, presupuesto
 
 
@@ -236,7 +255,7 @@ def asignar_bonos_random_limitado(presupuesto,empleados, bono_minimo, bono_maxim
 
 while True:
             print("\n [-----| MENÚ |-----]")
-            print("1.- Asignar bono estandar")
+            print("1.- Asignar bono estandar.")
             print("2.- Repartir bonos de manera equitativa.")
             print("3.- Asignar presupuesto de manera aleatoria.")
             print("4.- Asignar presupuesto de manera aleatoria limitado.")
