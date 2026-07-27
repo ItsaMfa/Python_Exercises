@@ -104,7 +104,7 @@ def asignar_bono_equitativo(presupuesto, lista_empleados, bono):
 
 
                 if bono_equitativo < bono:
-                        if presupuesto >= bono_equitativo:
+                        if presupuesto >= bono:
                             lista_empleados[key][0] = bono
                             presupuesto -= bono
                             bono_asignado += bono
